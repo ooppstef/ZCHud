@@ -62,15 +62,14 @@ static double const ZCLineSpace = 4;
         for (CFIndex i = 0;i < lineCount;i++) {
             CTLineRef line = CFArrayGetValueAtIndex(lines, i);
             CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-
-            totalHeight += (ascent + descent);
-            totalHeight += ZCLineSpace;
+            totalHeight += (ascent + descent + ZCLineSpace);
         }
         
         CFRelease(frameRef);
         CFRelease(setterRef);
         CFRelease(pathRef);
-        return ceil(totalHeight) + 2 * ZCLineSpace;
+        
+        return ceil(totalHeight) ;
     }
 }
 
@@ -90,7 +89,31 @@ static double const ZCLineSpace = 4;
     
     CTFramesetterRef setterRef = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)text);
     CTFrameRef frameRef = CTFramesetterCreateFrame(setterRef, CFRangeMake(0, text.length), pathRef, NULL);
-    CTFrameDraw(frameRef, ctx);
+
+    CFArrayRef lines = CTFrameGetLines(frameRef);
+    CFIndex lineCount = CFArrayGetCount(lines);
+    CGPoint lineOriPoints[lineCount];
+    CTFrameGetLineOrigins(frameRef, CFRangeMake(0, 0), lineOriPoints);
+
+    CGFloat y = 0;
+    for (CFIndex i = 0;i < lineCount;i++) {
+        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+        CGFloat ascent,descent,leading;
+        CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+        CGPoint oriPoint = lineOriPoints[i];
+        if (i == 0) {
+            y = oriPoint.y;
+        }
+        else {
+            y = y - ZCLineSpace - ascent;
+            oriPoint.y = y;
+        }
+        
+        CGContextSetTextPosition(ctx, oriPoint.x, oriPoint.y);
+        CTLineDraw(line, ctx);
+        
+        y -= descent;
+    }
     
     CFRelease(frameRef);
     CFRelease(setterRef);

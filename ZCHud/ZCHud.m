@@ -10,6 +10,8 @@
 #import "ZCCircleLayer.h"
 #import "ZCTextLayer.h"
 
+static double const ZCSpaceBetweenCircleAndText = 5;
+
 @interface ZCHud ()
 
 @property (nonatomic, strong) ZCCircleLayer *circleLayer;
@@ -55,8 +57,7 @@
     [self performSelector:@selector(failtureAnimation) withObject:nil afterDelay:1];
     
     _textLayer = [ZCTextLayer layer];
-    _textLayer.bounds = CGRectMake(0, 0, _circleLayer.bounds.size.width, 0);
-    _textLayer.position = CGPointMake(self.bounds.size.width / 2, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + _textLayer.bounds.size.height / 2);
+    _textLayer.frame = CGRectMake(self.bounds.size.width / 2, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + ZCSpaceBetweenCircleAndText, _circleLayer.bounds.size.width, 0);
     _textLayer.backgroundColor = [UIColor redColor].CGColor;
     [self.layer addSublayer:_textLayer];
 }
@@ -156,7 +157,7 @@
     }
     _text = text;
     _textLayer.text = text;
-    _textLayer.bounds = CGRectMake(0, 0, _textLayer.bounds.size.width, [_textLayer heightForSelf]);
+    _textLayer.frame = CGRectMake((self.bounds.size.width - _circleLayer.bounds.size.width) / 2, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + ZCSpaceBetweenCircleAndText, _circleLayer.bounds.size.width, [_textLayer heightForSelf]);
     [self redisplay];
 }
 
