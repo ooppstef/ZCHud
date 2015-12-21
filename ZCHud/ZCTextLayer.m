@@ -41,7 +41,7 @@ static double const ZCLineSpace = 4;
     return text;
 }
 
-- (CGFloat)heightForSelf {
+- (CGFloat)heightWithWidth:(CGFloat)width {
     if (self.text.length == 0) {
         return 0;
     }
@@ -49,7 +49,7 @@ static double const ZCLineSpace = 4;
         NSAttributedString *text = [self attributedString];
         
         CGMutablePathRef pathRef = CGPathCreateMutable();
-        CGPathAddRect(pathRef, NULL, CGRectMake(0, 0, self.bounds.size.width, CGFLOAT_MAX));
+        CGPathAddRect(pathRef, NULL, CGRectMake(0, 0, width, CGFLOAT_MAX));
         CTFramesetterRef setterRef = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)text);
         CTFrameRef frameRef = CTFramesetterCreateFrame(setterRef, CFRangeMake(0, text.length), pathRef, NULL);
     

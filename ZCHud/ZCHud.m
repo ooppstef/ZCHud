@@ -10,12 +10,14 @@
 #import "ZCCircleLayer.h"
 #import "ZCTextLayer.h"
 
-static double const ZCSpaceBetweenCircleAndText = 5;
+static double const kZCSpaceBetweenCircleAndText = 5;
 
 @interface ZCHud ()
 
 @property (nonatomic, strong) ZCCircleLayer *circleLayer;
 @property (nonatomic, strong) ZCTextLayer   *textLayer;
+
+@property (nonatomic, assign) CGFloat       textLayerHeight;
 
 @end
 
@@ -48,21 +50,32 @@ static double const ZCSpaceBetweenCircleAndText = 5;
 
 - (void)setupCricle {
     _circleLayer = [ZCCircleLayer layer];
-    _circleLayer.bounds = CGRectMake(0, 0, 100, 100);
-    _circleLayer.position = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
+    
+    CGFloat radius = MIN(self.bounds.size.width, self.bounds.size.height);
+    radius = radius / 2;
+    
+    _circleLayer.bounds = CGRectMake(0, 0, radius, radius);
+    _circleLayer.position = CGPointMake(self.bounds.size.width / 2, radius / 2);
     _circleLayer.shouldRasterize = YES;
     [_circleLayer setNeedsDisplay];
     [self.layer addSublayer:_circleLayer];
     [self.circleLayer startRotation];
-    [self performSelector:@selector(failtureAnimation) withObject:nil afterDelay:1];
     
     _textLayer = [ZCTextLayer layer];
-    _textLayer.frame = CGRectMake(self.bounds.size.width / 2, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + ZCSpaceBetweenCircleAndText, _circleLayer.bounds.size.width, 0);
-    _textLayer.backgroundColor = [UIColor redColor].CGColor;
     [self.layer addSublayer:_textLayer];
 }
 
+- (CGRect)realFrame:(CGRect)frame {
+    CGFloat radius = MIN(frame.size.width, frame.size.height);
+    CGFloat totalHeight = radius + kZCSpaceBetweenCircleAndText + self.textLayerHeight;
+    return CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, totalHeight);
+}
+
 - (void)redisplay {
+    CGFloat radius = MIN(self.bounds.size.width, self.bounds.size.height);
+    _circleLayer.bounds = CGRectMake(0, 0, radius, radius);
+    _circleLayer.position = CGPointMake(self.bounds.size.width / 2, radius / 2);
+    _textLayer.frame = CGRectMake(0, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + kZCSpaceBetweenCircleAndText, self.bounds.size.width, self.textLayerHeight);
     [_textLayer setNeedsDisplay];
 }
 
@@ -157,7 +170,12 @@ static double const ZCSpaceBetweenCircleAndText = 5;
     }
     _text = text;
     _textLayer.text = text;
-    _textLayer.frame = CGRectMake((self.bounds.size.width - _circleLayer.bounds.size.width) / 2, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + ZCSpaceBetweenCircleAndText, _circleLayer.bounds.size.width, [_textLayer heightForSelf]);
+    [self setFrame:self.frame];
+}
+
+- (void)setFrame:(CGRect)frame {
+    self.textLayerHeight = [self.textLayer heightWithWidth:frame.size.width];
+    [super setFrame:[self realFrame:frame]];
     [self redisplay];
 }
 

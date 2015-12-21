@@ -8,7 +8,7 @@
 
 #import "ZCCircleLayer.h"
 
-static UIColor *zcHudBorderColor;
+static UIColor *kZCHudBorderColor;
 
 @implementation ZCCircleLayer
 
@@ -83,8 +83,8 @@ static UIColor *zcHudBorderColor;
     if (self.circleBorderColor) {
         targetColor = self.circleBorderColor;
     }
-    else if (zcHudBorderColor) {
-        targetColor = zcHudBorderColor;
+    else if (kZCHudBorderColor) {
+        targetColor = kZCHudBorderColor;
     }
     else {
         targetColor = [UIColor colorWithRed:37 / 255.f green:146 / 255.f blue:227 / 255. alpha:1];
@@ -97,7 +97,7 @@ static UIColor *zcHudBorderColor;
 
 - (void)setCircleBorderColor:(UIColor *)circleBorderColor {
     _circleBorderColor = circleBorderColor;
-    zcHudBorderColor = circleBorderColor;
+    kZCHudBorderColor = circleBorderColor;
 }
 
 @end

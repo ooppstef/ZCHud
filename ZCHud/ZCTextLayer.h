@@ -15,6 +15,6 @@
 @property (nonatomic, strong) UIColor  *fontColor;
 @property (nonatomic, copy)   NSString *text;
 
-- (CGFloat)heightForSelf;
+- (CGFloat)heightWithWidth:(CGFloat)width;
 
 @end
