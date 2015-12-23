@@ -20,7 +20,6 @@
     self.view.backgroundColor = [UIColor lightGrayColor];
     ZCHud *hud = [ZCHud new];
     [hud showInView:self.view];
-    [self.view addSubview:hud];
 }
 
 
