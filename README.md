@@ -10,7 +10,7 @@ You can make a simpla usage as this:
     [self.view addSubview:hud];
 ```
 
-Pod supports coming soon!
+Pods supports coming soon!
 
 
 
