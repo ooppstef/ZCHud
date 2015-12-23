@@ -30,9 +30,9 @@ static UIColor *kZCHudBorderColor;
     self.progress = 1;
 }
 
-- (void)fillFullCircle {
+- (void)fillFullCircleWithDuration:(NSTimeInterval)time {
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"progress"];
-    animation.duration = 0.25;
+    animation.duration = time;
     animation.fromValue = @0;
     animation.toValue = @1;
     animation.removedOnCompletion = NO;

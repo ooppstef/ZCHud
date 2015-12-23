@@ -17,6 +17,6 @@
 
 - (void)startRotation;
 - (void)endRotation;
-- (void)fillFullCircle;
+- (void)fillFullCircleWithDuration:(NSTimeInterval)time;
 
 @end

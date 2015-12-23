@@ -10,14 +10,19 @@
 #import "ZCCircleLayer.h"
 #import "ZCTextLayer.h"
 
-static double const kZCSpaceBetweenCircleAndText = 5;
+static double const kZCSpaceBetweenCircleAndText = 10;
+
+typedef void (^zcTouchHandler) (ZCHud *hud);
 
 @interface ZCHud ()
 
-@property (nonatomic, strong) ZCCircleLayer *circleLayer;
-@property (nonatomic, strong) ZCTextLayer   *textLayer;
+@property (nonatomic, strong) ZCCircleLayer          *circleLayer;
+@property (nonatomic, strong) ZCTextLayer            *textLayer;
 
-@property (nonatomic, assign) CGFloat       textLayerHeight;
+@property (nonatomic, assign) CGFloat                textLayerHeight;
+@property (nonatomic, assign) CGRect                 oriRect;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, copy  ) zcTouchHandler         touchHandler;
 
 @end
 
@@ -27,61 +32,154 @@ static double const kZCSpaceBetweenCircleAndText = 5;
 
 - (id)init {
     if (self = [super init]) {
-        [self setupCricle];
+        [self setup];
     }
     return self;
 }
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self setupCricle];
+        [self setup];
     }
     return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self setupCricle];
+        [self setup];
     }
     return self;
 }
 
+- (void)dealloc {
+    NSLog(@"dealloc");
+}
+
+#pragma mark - public methods
+
+- (void)show {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    if (!window) {
+        return;
+    }
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, window.frame.size.height)];
+    bgView.tag = 'ZCBG';
+    [window addSubview:bgView];
+    [window addSubview:self];
+    
+    if (CGRectEqualToRect(self.oriRect, CGRectZero)) {
+        self.frame = CGRectMake(0, 0, 100, 100);
+    }
+    self.center = window.center;
+    self.oriRect = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.oriRect.size.width, self.oriRect.size.height);
+}
+
+- (void)showInView:(UIView *)view {
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)];
+    bgView.tag = 'ZCBG';
+    [view addSubview:bgView];
+    [view addSubview:self];
+    
+    if (CGRectEqualToRect(self.oriRect, CGRectZero)) {
+        self.frame = CGRectMake(0, 0, 100, 100);
+    }
+    self.center = view.center;
+    self.oriRect = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.oriRect.size.width, self.oriRect.size.height);
+}
+
+- (void)hide {
+    [UIView animateWithDuration:0.3 animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished) {
+        [[self.superview viewWithTag:'ZCBG'] removeFromSuperview];
+        [self removeFromSuperview];
+    }];
+}
+
+- (void)hideInSuccessAnimationWithText:(NSString *)text duration:(NSTimeInterval)time {
+    [self hideWithAnimation:YES text:text duration:time];
+}
+
+- (void)hideInFailureAnimationWithText:(NSString *)text duration:(NSTimeInterval)time {
+    [self hideWithAnimation:NO text:text duration:time];
+}
+
+- (void)hudTouched:(void (^) (ZCHud *hud))handler {
+    self.touchHandler = handler;
+    for (UITapGestureRecognizer *tapGesture in self.gestureRecognizers) {
+        [self removeGestureRecognizer:tapGesture];
+    }
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doTouchAction)];
+    [self addGestureRecognizer:tap];
+}
+
+#pragma mark - private methods
+
+- (void)hideWithAnimation:(BOOL)isSuc text:(NSString *)text duration:(NSTimeInterval)time {
+    NSTimeInterval animationDuration = 0.25;
+    if (time >= 0.25 && time <= 0.5) {
+        animationDuration = time;
+    }
+    else if (time > 0.5) {
+        animationDuration = 0.5;
+    }
+    if (isSuc) {
+        [self successAnimationInDuration:animationDuration];
+    }
+    else {
+        [self failtureAnimationInDuration:animationDuration];
+    }
+    
+    self.text = text;
+    
+    dispatch_time_t t = dispatch_time(DISPATCH_TIME_NOW, time * NSEC_PER_SEC);
+    dispatch_after(t, dispatch_get_main_queue(), ^{
+        [self hide];
+    });
+}
+
+- (void)doTouchAction {
+    !self.touchHandler ? : self.touchHandler(self);
+}
+
 #pragma mark - setup UI
 
-- (void)setupCricle {
+- (void)setup {
+    self.backgroundColor = [UIColor whiteColor];
+    self.layer.cornerRadius = 5;
+    
     _circleLayer = [ZCCircleLayer layer];
-    
-    CGFloat radius = MIN(self.bounds.size.width, self.bounds.size.height);
-    radius = radius / 2;
-    
-    _circleLayer.bounds = CGRectMake(0, 0, radius, radius);
-    _circleLayer.position = CGPointMake(self.bounds.size.width / 2, radius / 2);
     _circleLayer.shouldRasterize = YES;
-    [_circleLayer setNeedsDisplay];
     [self.layer addSublayer:_circleLayer];
     [self.circleLayer startRotation];
     
     _textLayer = [ZCTextLayer layer];
     [self.layer addSublayer:_textLayer];
+    
+    if (!CGRectEqualToRect(self.oriRect, CGRectZero)) {
+        [self setFrame:self.oriRect];
+    }
 }
 
 - (CGRect)realFrame:(CGRect)frame {
     CGFloat radius = MIN(frame.size.width, frame.size.height);
-    CGFloat totalHeight = radius + kZCSpaceBetweenCircleAndText + self.textLayerHeight;
+    NSInteger count = self.text.length > 0 ? 3 : 2;
+    CGFloat totalHeight = radius / 2 + kZCSpaceBetweenCircleAndText * count + self.textLayerHeight;
     return CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, totalHeight);
 }
 
 - (void)redisplay {
-    CGFloat radius = MIN(self.bounds.size.width, self.bounds.size.height);
-    _circleLayer.bounds = CGRectMake(0, 0, radius, radius);
-    _circleLayer.position = CGPointMake(self.bounds.size.width / 2, radius / 2);
+    CGFloat radius = MIN(self.oriRect.size.width, self.oriRect.size.height);
+    _circleLayer.bounds = CGRectMake(0, 0, radius / 2, radius / 2);
+    _circleLayer.position = CGPointMake(self.bounds.size.width / 2, radius / 4 + kZCSpaceBetweenCircleAndText);
+    [_circleLayer setNeedsDisplay];
     _textLayer.frame = CGRectMake(0, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + kZCSpaceBetweenCircleAndText, self.bounds.size.width, self.textLayerHeight);
     [_textLayer setNeedsDisplay];
 }
 
 #pragma mark - animations
 
-- (void)successAnimation {
+- (void)successAnimationInDuration:(NSTimeInterval)duration {
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     
     CGFloat width = self.circleLayer.bounds.size.width;
@@ -95,7 +193,7 @@ static double const kZCSpaceBetweenCircleAndText = 5;
     
     shapeLayer.path = path.CGPath;
     shapeLayer.lineWidth = MAX(3, self.borderWidth);
-    shapeLayer.strokeColor = [UIColor redColor].CGColor;
+    shapeLayer.strokeColor = [UIColor colorWithRed:37 / 255.f green:146 / 255.f blue:227 / 255. alpha:1].CGColor;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     shapeLayer.lineCap = kCALineCapRound;
     [self.layer addSublayer:shapeLayer];
@@ -104,12 +202,13 @@ static double const kZCSpaceBetweenCircleAndText = 5;
     endAnimation.fromValue = @(0.0f);
     endAnimation.toValue = @(1.0f);
     endAnimation.removedOnCompletion = YES;
+    endAnimation.duration = duration;
     [shapeLayer addAnimation:endAnimation forKey:@"ZCHudSuccessKey"];
     
-    [self.circleLayer fillFullCircle];
+    [self.circleLayer fillFullCircleWithDuration:duration];
 }
 
-- (void)failtureAnimation {
+- (void)failtureAnimationInDuration:(NSTimeInterval)duration {
     CAShapeLayer *leftLayer = [CAShapeLayer layer];
     CAShapeLayer *rightLayer = [CAShapeLayer layer];
     
@@ -146,10 +245,11 @@ static double const kZCSpaceBetweenCircleAndText = 5;
     endAnimation.fromValue = @(0.0f);
     endAnimation.toValue = @(1.0f);
     endAnimation.removedOnCompletion = YES;
+    endAnimation.duration = duration;
     [leftLayer addAnimation:endAnimation forKey:@"ZCHudFailureKey"];
     [rightLayer addAnimation:endAnimation forKey:@"ZCHudFailureKey"];
     
-    [self.circleLayer fillFullCircle];
+    [self.circleLayer fillFullCircleWithDuration:duration];
 }
 
 #pragma mark - setter and getter methods
@@ -170,12 +270,18 @@ static double const kZCSpaceBetweenCircleAndText = 5;
     }
     _text = text;
     _textLayer.text = text;
-    [self setFrame:self.frame];
+    [self setFrame:self.oriRect];
 }
 
 - (void)setFrame:(CGRect)frame {
+    _oriRect = frame;
+    if (!self.circleLayer) {
+        return;
+    }
     self.textLayerHeight = [self.textLayer heightWithWidth:frame.size.width];
-    [super setFrame:[self realFrame:frame]];
+    [UIView animateWithDuration:0.3 animations:^{
+        [super setFrame:[self realFrame:frame]];
+    }];
     [self redisplay];
 }
 

@@ -15,7 +15,12 @@
 @property (nonatomic, strong) UIColor  *borderColor;
 @property (nonatomic, copy)   NSString *text;
 
-- (void)successAnimation;
-- (void)failtureAnimation;
+- (void)show;
+- (void)showInView:(UIView *)view;
+- (void)hide;
+- (void)hideInSuccessAnimationWithText:(NSString *)text duration:(NSTimeInterval)time;
+- (void)hideInFailureAnimationWithText:(NSString *)text duration:(NSTimeInterval)time;
+
+- (void)hudTouched:(void (^) (ZCHud *hud))handler;
 
 @end
