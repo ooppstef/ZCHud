@@ -22,7 +22,7 @@
     
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^{
-        [hud hideInFailureAnimationWithText:@"是的" duration:1000];
+        [hud hide];
     });
 }
 

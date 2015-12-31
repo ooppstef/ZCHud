@@ -152,7 +152,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     _circleLayer.shouldRasterize = YES;
     [self.layer addSublayer:_circleLayer];
     [self.circleLayer startRotation];
-    
+
     _textLayer = [ZCTextLayer layer];
     [self.layer addSublayer:_textLayer];
     
@@ -279,9 +279,14 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
         return;
     }
     self.textLayerHeight = [_textLayer heightWithWidth:frame.size.width];
-    [UIView animateWithDuration:0.3 animations:^{
+    if (CGRectEqualToRect(self.frame, CGRectZero)) {
         [super setFrame:[self realFrame:frame]];
-    }];
+    }
+    else {
+        [UIView animateWithDuration:0.25 animations:^{
+            [super setFrame:[self realFrame:frame]];
+        }];
+    }
     [self redisplay];
 }
 
