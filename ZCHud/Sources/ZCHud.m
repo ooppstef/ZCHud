@@ -51,10 +51,6 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     return self;
 }
 
-- (void)dealloc {
-    NSLog(@"dealloc");
-}
-
 #pragma mark - public methods
 
 - (void)show {
@@ -67,11 +63,11 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [window addSubview:bgView];
     [window addSubview:self];
     
-    if (CGRectEqualToRect(self.oriRect, CGRectZero)) {
+    if (CGRectEqualToRect(_oriRect, CGRectZero)) {
         self.frame = CGRectMake(0, 0, 100, 100);
     }
     self.center = window.center;
-    self.oriRect = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.oriRect.size.width, self.oriRect.size.height);
+    _oriRect = CGRectMake(self.frame.origin.x, self.frame.origin.y, _oriRect.size.width, _oriRect.size.height);
 }
 
 - (void)showInView:(UIView *)view {
@@ -80,11 +76,11 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [view addSubview:bgView];
     [view addSubview:self];
     
-    if (CGRectEqualToRect(self.oriRect, CGRectZero)) {
+    if (CGRectEqualToRect(_oriRect, CGRectZero)) {
         self.frame = CGRectMake(0, 0, 100, 100);
     }
     self.center = view.center;
-    self.oriRect = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.oriRect.size.width, self.oriRect.size.height);
+    _oriRect = CGRectMake(self.frame.origin.x, self.frame.origin.y, _oriRect.size.width, _oriRect.size.height);
 }
 
 - (void)hide {
@@ -105,7 +101,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
 }
 
 - (void)hudTouched:(void (^) (ZCHud *hud))handler {
-    self.touchHandler = handler;
+    _touchHandler = handler;
     for (UITapGestureRecognizer *tapGesture in self.gestureRecognizers) {
         [self removeGestureRecognizer:tapGesture];
     }
@@ -130,7 +126,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
         [self failtureAnimationInDuration:animationDuration];
     }
     
-    self.text = text;
+    [self setText:text];
     
     dispatch_time_t t = dispatch_time(DISPATCH_TIME_NOW, time * NSEC_PER_SEC);
     dispatch_after(t, dispatch_get_main_queue(), ^{
@@ -147,6 +143,10 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
 - (void)setup {
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = 5;
+    self.layer.shadowColor = [UIColor colorWithRed:70 / 255.f green:70 / 255.f blue:70 / 255.f alpha:1].CGColor;
+    self.layer.shadowRadius = 2;
+    self.layer.shadowOpacity = 1;
+    self.layer.shadowOffset = CGSizeZero;
     
     _circleLayer = [ZCCircleLayer layer];
     _circleLayer.shouldRasterize = YES;
@@ -163,17 +163,17 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
 
 - (CGRect)realFrame:(CGRect)frame {
     CGFloat radius = MIN(frame.size.width, frame.size.height);
-    NSInteger count = self.text.length > 0 ? 3 : 2;
-    CGFloat totalHeight = radius / 2 + kZCSpaceBetweenCircleAndText * count + self.textLayerHeight;
+    NSInteger count = _text.length > 0 ? 3 : 2;
+    CGFloat totalHeight = radius / 2 + kZCSpaceBetweenCircleAndText * count + _textLayerHeight;
     return CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, totalHeight);
 }
 
 - (void)redisplay {
-    CGFloat radius = MIN(self.oriRect.size.width, self.oriRect.size.height);
+    CGFloat radius = MIN(_oriRect.size.width, _oriRect.size.height);
     _circleLayer.bounds = CGRectMake(0, 0, radius / 2, radius / 2);
     _circleLayer.position = CGPointMake(self.bounds.size.width / 2, radius / 4 + kZCSpaceBetweenCircleAndText);
     [_circleLayer setNeedsDisplay];
-    _textLayer.frame = CGRectMake(0, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + kZCSpaceBetweenCircleAndText, self.bounds.size.width, self.textLayerHeight);
+    _textLayer.frame = CGRectMake(0, _circleLayer.frame.origin.y + _circleLayer.frame.size.height + kZCSpaceBetweenCircleAndText, self.bounds.size.width, _textLayerHeight);
     [_textLayer setNeedsDisplay];
 }
 
@@ -182,8 +182,8 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
 - (void)successAnimationInDuration:(NSTimeInterval)duration {
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     
-    CGFloat width = self.circleLayer.bounds.size.width;
-    CGFloat height = self.circleLayer.bounds.size.height;
+    CGFloat width = _circleLayer.bounds.size.width;
+    CGFloat height = _circleLayer.bounds.size.height;
     shapeLayer.position = CGPointMake((self.bounds.size.width - width) / 2, (self.bounds.size.height - height) / 2);
     
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -192,7 +192,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [path addLineToPoint:CGPointMake(width / 10 * 7.5, height / 8 * 2.2)];
     
     shapeLayer.path = path.CGPath;
-    shapeLayer.lineWidth = MAX(3, self.borderWidth);
+    shapeLayer.lineWidth = MAX(3, _borderWidth);
     shapeLayer.strokeColor = [UIColor colorWithRed:37 / 255.f green:146 / 255.f blue:227 / 255. alpha:1].CGColor;
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     shapeLayer.lineCap = kCALineCapRound;
@@ -205,16 +205,16 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     endAnimation.duration = duration;
     [shapeLayer addAnimation:endAnimation forKey:@"ZCHudSuccessKey"];
     
-    [self.circleLayer fillFullCircleWithDuration:duration];
+    [_circleLayer fillFullCircleWithDuration:duration];
 }
 
 - (void)failtureAnimationInDuration:(NSTimeInterval)duration {
     CAShapeLayer *leftLayer = [CAShapeLayer layer];
     CAShapeLayer *rightLayer = [CAShapeLayer layer];
     
-    CGFloat width = self.circleLayer.bounds.size.width;
-    CGFloat height = self.circleLayer.bounds.size.height;
-    CGFloat offset = MAX(3, self.borderWidth) / 2;
+    CGFloat width = _circleLayer.bounds.size.width;
+    CGFloat height = _circleLayer.bounds.size.height;
+    CGFloat offset = MAX(3, _borderWidth) / 2;
     
     leftLayer.position = CGPointMake((self.bounds.size.width - width) / 2, (self.bounds.size.height - height) / 2);
     rightLayer.position = leftLayer.position;
@@ -224,7 +224,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [rightPath addLineToPoint:CGPointMake(width / 4 * 3 - offset, height / 4 * 3 - offset)];
     
     rightLayer.path = rightPath.CGPath;
-    rightLayer.lineWidth = MAX(3, self.borderWidth);
+    rightLayer.lineWidth = MAX(3, _borderWidth);
     rightLayer.strokeColor = [UIColor redColor].CGColor;
     rightLayer.fillColor = [UIColor clearColor].CGColor;
     rightLayer.lineCap = kCALineCapRound;
@@ -235,7 +235,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [leftPath addLineToPoint:CGPointMake(width / 4 + offset, height / 4 * 3 - offset)];
     
     leftLayer.path = leftPath.CGPath;
-    leftLayer.lineWidth = MAX(3, self.borderWidth);
+    leftLayer.lineWidth = MAX(3, _borderWidth);
     leftLayer.strokeColor = [UIColor redColor].CGColor;
     leftLayer.fillColor = [UIColor clearColor].CGColor;
     leftLayer.lineCap = kCALineCapRound;
@@ -249,7 +249,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [leftLayer addAnimation:endAnimation forKey:@"ZCHudFailureKey"];
     [rightLayer addAnimation:endAnimation forKey:@"ZCHudFailureKey"];
     
-    [self.circleLayer fillFullCircleWithDuration:duration];
+    [_circleLayer fillFullCircleWithDuration:duration];
 }
 
 #pragma mark - setter and getter methods
@@ -270,15 +270,15 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     }
     _text = text;
     _textLayer.text = text;
-    [self setFrame:self.oriRect];
+    [self setFrame:_oriRect];
 }
 
 - (void)setFrame:(CGRect)frame {
     _oriRect = frame;
-    if (!self.circleLayer) {
+    if (!_circleLayer) {
         return;
     }
-    self.textLayerHeight = [self.textLayer heightWithWidth:frame.size.width];
+    self.textLayerHeight = [_textLayer heightWithWidth:frame.size.width];
     [UIView animateWithDuration:0.3 animations:^{
         [super setFrame:[self realFrame:frame]];
     }];

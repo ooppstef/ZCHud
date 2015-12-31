@@ -7,22 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5638B32B1C1AAFB900929327 /* ZCCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5638B32A1C1AAFB900929327 /* ZCCircleLayer.m */; };
-		56CFFBCF1C2015A6005D3276 /* ZCTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CFFBCE1C2015A6005D3276 /* ZCTextLayer.m */; };
+		560397711C34E64B00175BE4 /* ZCCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5603976C1C34E64B00175BE4 /* ZCCircleLayer.m */; };
+		560397721C34E64B00175BE4 /* ZCHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 5603976E1C34E64B00175BE4 /* ZCHud.m */; };
+		560397731C34E64B00175BE4 /* ZCTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 560397701C34E64B00175BE4 /* ZCTextLayer.m */; };
 		56EBB8EC1C16C67800FC59E9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 56EBB8EB1C16C67800FC59E9 /* main.m */; };
 		56EBB8EF1C16C67800FC59E9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 56EBB8EE1C16C67800FC59E9 /* AppDelegate.m */; };
 		56EBB8F21C16C67800FC59E9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56EBB8F11C16C67800FC59E9 /* ViewController.m */; };
 		56EBB8F51C16C67800FC59E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56EBB8F31C16C67800FC59E9 /* Main.storyboard */; };
 		56EBB8F71C16C67800FC59E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56EBB8F61C16C67800FC59E9 /* Assets.xcassets */; };
 		56EBB8FA1C16C67800FC59E9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56EBB8F81C16C67800FC59E9 /* LaunchScreen.storyboard */; };
-		56EBB9031C16C68B00FC59E9 /* ZCHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 56EBB9021C16C68B00FC59E9 /* ZCHud.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5638B3291C1AAFB900929327 /* ZCCircleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCircleLayer.h; sourceTree = "<group>"; };
-		5638B32A1C1AAFB900929327 /* ZCCircleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCircleLayer.m; sourceTree = "<group>"; };
-		56CFFBCD1C2015A6005D3276 /* ZCTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCTextLayer.h; sourceTree = "<group>"; };
-		56CFFBCE1C2015A6005D3276 /* ZCTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCTextLayer.m; sourceTree = "<group>"; };
+		5603976B1C34E64B00175BE4 /* ZCCircleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCCircleLayer.h; sourceTree = "<group>"; };
+		5603976C1C34E64B00175BE4 /* ZCCircleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCCircleLayer.m; sourceTree = "<group>"; };
+		5603976D1C34E64B00175BE4 /* ZCHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCHud.h; sourceTree = "<group>"; };
+		5603976E1C34E64B00175BE4 /* ZCHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCHud.m; sourceTree = "<group>"; };
+		5603976F1C34E64B00175BE4 /* ZCTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCTextLayer.h; sourceTree = "<group>"; };
+		560397701C34E64B00175BE4 /* ZCTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCTextLayer.m; sourceTree = "<group>"; };
 		56EBB8E71C16C67800FC59E9 /* ZCHud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZCHud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56EBB8EB1C16C67800FC59E9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		56EBB8ED1C16C67800FC59E9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -33,8 +35,6 @@
 		56EBB8F61C16C67800FC59E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56EBB8F91C16C67800FC59E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		56EBB8FB1C16C67800FC59E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		56EBB9011C16C68B00FC59E9 /* ZCHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCHud.h; sourceTree = "<group>"; };
-		56EBB9021C16C68B00FC59E9 /* ZCHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCHud.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +48,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5603976A1C34E64B00175BE4 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				5603976D1C34E64B00175BE4 /* ZCHud.h */,
+				5603976E1C34E64B00175BE4 /* ZCHud.m */,
+				5603976B1C34E64B00175BE4 /* ZCCircleLayer.h */,
+				5603976C1C34E64B00175BE4 /* ZCCircleLayer.m */,
+				5603976F1C34E64B00175BE4 /* ZCTextLayer.h */,
+				560397701C34E64B00175BE4 /* ZCTextLayer.m */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
 		56EBB8DE1C16C67800FC59E9 = {
 			isa = PBXGroup;
 			children = (
@@ -67,16 +80,11 @@
 		56EBB8E91C16C67800FC59E9 /* ZCHud */ = {
 			isa = PBXGroup;
 			children = (
+				5603976A1C34E64B00175BE4 /* Sources */,
 				56EBB8ED1C16C67800FC59E9 /* AppDelegate.h */,
 				56EBB8EE1C16C67800FC59E9 /* AppDelegate.m */,
 				56EBB8F01C16C67800FC59E9 /* ViewController.h */,
 				56EBB8F11C16C67800FC59E9 /* ViewController.m */,
-				56EBB9011C16C68B00FC59E9 /* ZCHud.h */,
-				56EBB9021C16C68B00FC59E9 /* ZCHud.m */,
-				5638B3291C1AAFB900929327 /* ZCCircleLayer.h */,
-				5638B32A1C1AAFB900929327 /* ZCCircleLayer.m */,
-				56CFFBCD1C2015A6005D3276 /* ZCTextLayer.h */,
-				56CFFBCE1C2015A6005D3276 /* ZCTextLayer.m */,
 				56EBB8F31C16C67800FC59E9 /* Main.storyboard */,
 				56EBB8F61C16C67800FC59E9 /* Assets.xcassets */,
 				56EBB8F81C16C67800FC59E9 /* LaunchScreen.storyboard */,
@@ -164,11 +172,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				56EBB9031C16C68B00FC59E9 /* ZCHud.m in Sources */,
-				56CFFBCF1C2015A6005D3276 /* ZCTextLayer.m in Sources */,
 				56EBB8F21C16C67800FC59E9 /* ViewController.m in Sources */,
+				560397731C34E64B00175BE4 /* ZCTextLayer.m in Sources */,
 				56EBB8EF1C16C67800FC59E9 /* AppDelegate.m in Sources */,
-				5638B32B1C1AAFB900929327 /* ZCCircleLayer.m in Sources */,
+				560397721C34E64B00175BE4 /* ZCHud.m in Sources */,
+				560397711C34E64B00175BE4 /* ZCCircleLayer.m in Sources */,
 				56EBB8EC1C16C67800FC59E9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

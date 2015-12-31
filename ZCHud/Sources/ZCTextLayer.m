@@ -28,10 +28,10 @@ static double const ZCLineSpace = 4;
 }
 
 - (NSAttributedString *)attributedString {
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:self.text];
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:_text];
     NSMutableDictionary *attributes = [@{} mutableCopy];
-    attributes[NSForegroundColorAttributeName] = self.fontColor;
-    attributes[NSFontAttributeName] = self.font;
+    attributes[NSForegroundColorAttributeName] = _fontColor;
+    attributes[NSFontAttributeName] = _font;
     NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
     style.alignment = NSTextAlignmentCenter;
     style.lineSpacing = ZCLineSpace;
@@ -42,7 +42,7 @@ static double const ZCLineSpace = 4;
 }
 
 - (CGFloat)heightWithWidth:(CGFloat)width {
-    if (self.text.length == 0) {
+    if (_text.length == 0) {
         return 0;
     }
     else {
@@ -74,7 +74,7 @@ static double const ZCLineSpace = 4;
 }
 
 - (void)drawInContext:(CGContextRef)ctx {
-    if (self.text.length == 0) {
+    if (_text.length == 0) {
         return;
     }
     

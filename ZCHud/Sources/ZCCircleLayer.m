@@ -27,7 +27,7 @@ static UIColor *kZCHudBorderColor;
 - (void)endRotation {
     [self removeAnimationForKey:@"ZCRotateAnimation"];
     [self removeAnimationForKey:@"ZCFillFullCircleAnimation"];
-    self.progress = 1;
+    _progress = 1;
 }
 
 - (void)fillFullCircleWithDuration:(NSTimeInterval)time {
@@ -59,7 +59,7 @@ static UIColor *kZCHudBorderColor;
 - (void)drawInContext:(CGContextRef)ctx {
     CGFloat width = self.bounds.size.width;
     CGFloat height = self.bounds.size.height;
-    CGFloat borderWidth = MAX(3, self.circleBorderWidth);
+    CGFloat borderWidth = MAX(3, _circleBorderWidth);
     CGFloat radius = MIN(width, height);
     if (radius - borderWidth > 0) {
         radius = radius - borderWidth;
@@ -71,8 +71,8 @@ static UIColor *kZCHudBorderColor;
     CGFloat oriStartAngle = M_PI * 7 / 2;
     CGFloat oriEndAngle = M_PI * 2;
     
-    CGFloat currentStartAngle = oriStartAngle + (targetStartAngle - oriStartAngle) * self.progress;
-    CGFloat currentEndAngle = oriEndAngle + (targetEndAngle - oriEndAngle) * self.progress;
+    CGFloat currentStartAngle = oriStartAngle + (targetStartAngle - oriStartAngle) * _progress;
+    CGFloat currentEndAngle = oriEndAngle + (targetEndAngle - oriEndAngle) * _progress;
     
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path addArcWithCenter:CGPointMake(width / 2, height / 2) radius:radius / 2 startAngle:currentStartAngle endAngle:currentEndAngle clockwise:NO];
@@ -80,8 +80,8 @@ static UIColor *kZCHudBorderColor;
     CGContextAddPath(ctx, path.CGPath);
     CGContextSetLineWidth(ctx, borderWidth);
     UIColor *targetColor;
-    if (self.circleBorderColor) {
-        targetColor = self.circleBorderColor;
+    if (_circleBorderColor) {
+        targetColor = _circleBorderColor;
     }
     else if (kZCHudBorderColor) {
         targetColor = kZCHudBorderColor;
