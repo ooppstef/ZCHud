@@ -1,15 +1,34 @@
 # ZCHud
 
-Beta version!
+A simple usage hud.
+Apply two animations for success and failture.
+Apply touches handler in block.
 
-You can make a simpla usage as this:
+##Usage
+Show:
 
 ```
-    ZCHud *hud = [ZCHud new];
-    [hud showInView:self.view];
+ _hud = [ZCHud new];
+ [_hud showInView:self.view];
+```
+Hide:
+
+```
+[_hud hide]
+//[_hud hideInFailureAnimationWithText:@"Hide" duration:3];
+//[_hud hideInSuccessAnimationWithText:@"Hide" duration:3];
 ```
 
-Pods supports coming soon!
+##Requirements
+iOS7+ and ARC
+##Installation
+Available through CocoaPods
+
+```
+pod 'ZCHud'
+```
+
+
 
 
 

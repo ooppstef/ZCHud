@@ -32,6 +32,9 @@
     
     _hud = [ZCHud new];
     [_hud showInView:self.view];
+    
+    
+    
     [_hud hudTouched:^(ZCHud *hud) {
         [hud hide];
     }];
