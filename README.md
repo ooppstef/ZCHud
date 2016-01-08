@@ -1,7 +1,10 @@
 # ZCHud
 
 A simple usage hud.
-Apply two animations for success and failture.
+
+Apply two animations for success and 
+failture.
+
 Apply touches handler in block.
 
 ##Usage
