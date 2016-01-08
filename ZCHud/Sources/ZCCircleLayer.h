@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface ZCCircleLayer : CALayer
+@interface ZCCircleLayer : CAShapeLayer
 
 @property (nonatomic, assign) CGFloat circleBorderWidth;
 @property (nonatomic, strong) UIColor *circleBorderColor;

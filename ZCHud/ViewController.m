@@ -11,21 +11,31 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) ZCHud *hud;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    ZCHud *hud = [ZCHud new];
-    [hud showInView:self.view];
     
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
-    dispatch_after(time, dispatch_get_main_queue(), ^{
-        [hud hide];
-    });
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    btn.frame = CGRectMake(0, 64, 100, 30);
+    [btn setTitle:@"Show" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(showHud) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
 }
 
+- (void)showHud {
+    _hud = nil;
+    
+    _hud = [ZCHud new];
+    [_hud showInView:self.view];
+    [_hud hudTouched:^(ZCHud *hud) {
+        [hud hide];
+    }];
+}
 
 
 @end
