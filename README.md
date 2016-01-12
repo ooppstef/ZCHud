@@ -3,7 +3,7 @@
 A simple usage hud.
 
 Apply two animations for success and 
-failture.
+failure.
 
 Apply touches handler in block.
 
