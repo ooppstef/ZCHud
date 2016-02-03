@@ -154,6 +154,7 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
     [self.circleLayer startRotation];
 
     _textLayer = [ZCTextLayer layer];
+    _textLayer.contentsScale = [UIScreen mainScreen].scale;
     [self.layer addSublayer:_textLayer];
     
     if (!CGRectEqualToRect(self.oriRect, CGRectZero)) {
@@ -283,8 +284,11 @@ typedef void (^zcTouchHandler) (ZCHud *hud);
         [super setFrame:[self realFrame:frame]];
     }
     else {
+        _textLayer.opacity = 0;
         [UIView animateWithDuration:0.25 animations:^{
             [super setFrame:[self realFrame:frame]];
+        } completion:^(BOOL finished) {
+            _textLayer.opacity = 1;
         }];
     }
     [self redisplay];

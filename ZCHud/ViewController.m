@@ -32,7 +32,7 @@
     
     _hud = [ZCHud new];
     [_hud showInView:self.view];
-    
+    _hud.text = @"Hi there";
     
     
     [_hud hudTouched:^(ZCHud *hud) {
