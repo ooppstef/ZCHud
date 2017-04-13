@@ -7,7 +7,7 @@ failure.
 
 Apply touches handler in block.
 
-##Usage
+## Usage
 Show:
 
 ```
@@ -22,7 +22,7 @@ Hide:
 //[_hud hideInSuccessAnimationWithText:@"Hide" duration:3];
 ```
 
-##Requirements
+## Requirements
 iOS7+ and ARC
 ##Installation
 Available through CocoaPods
